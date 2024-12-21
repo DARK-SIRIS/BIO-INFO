@@ -110,6 +110,9 @@ main {
 .list-links > li:nth-child(6) {
   background-color: #3b46c4;
 }
+.list-links > li:nth-child(7) {
+  background-color: #f5f10f;
+}
 
 .list-links > li > a {
   text-decoration: none;
@@ -129,4 +132,5 @@ main {
   .list-links > li {
     width: 100%;
   }
-}
+  }
+  
