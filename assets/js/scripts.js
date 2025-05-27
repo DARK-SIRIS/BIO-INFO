@@ -33424,29 +33424,3 @@ return orthographicDepthToViewZ(depth,cameraNear,cameraFar);
     bv();
     document.addEventListener("DOMContentLoaded", aM);
 })();
-/**
- * @license
- * Copyright 2010-2024 Three.js Authors
- * SPDX-License-Identifier: MIT
- */
-/**
- * anime.js - ESM
- * @version v4.0.2
- * @author Julian Garnier
- * @license MIT
- * @copyright (c) 2025 Julian Garnier
- * @see https://animejs.com
- */
-/**
- * lil-gui
- * https://lil-gui.georgealways.com
- * @version 0.20.0
- * @author George Michael Brower
- * @license MIT
- */
-/**
- * postprocessing v6.36.6 build Tue Dec 31 2024
- * https://github.com/pmndrs/postprocessing
- * Copyright 2015-2024 Raoul van Rüschen
- * @license Zlib
- */
