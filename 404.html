@@ -1,1 +1,485 @@
-dy
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Terminal Not Found</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Fira Code', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #00ff41;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00ff41;
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+            opacity: 0.7;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+        
+        .container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        .terminal {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #00ff41;
+            border-radius: 15px;
+            box-shadow: 
+                0 0 50px rgba(0, 255, 65, 0.3),
+                inset 0 0 50px rgba(0, 255, 65, 0.1);
+            max-width: 800px;
+            width: 100%;
+            transform: perspective(1000px) rotateX(5deg);
+            animation: terminalGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes terminalGlow {
+            0% {
+                box-shadow: 
+                    0 0 50px rgba(0, 255, 65, 0.3),
+                    inset 0 0 50px rgba(0, 255, 65, 0.1);
+            }
+            100% {
+                box-shadow: 
+                    0 0 80px rgba(0, 255, 65, 0.5),
+                    inset 0 0 80px rgba(0, 255, 65, 0.2);
+            }
+        }
+        
+        .terminal-header {
+            background: linear-gradient(90deg, #333, #555);
+            padding: 1rem;
+            border-radius: 13px 13px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .terminal-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .btn-close { background: #ff5f57; }
+        .btn-minimize { background: #ffbd2e; }
+        .btn-maximize { background: #28ca42; }
+        
+        .terminal-title {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-left: 1rem;
+        }
+        
+        .terminal-body {
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 0 0 13px 13px;
+        }
+        
+        .error-code {
+            font-size: clamp(4rem, 15vw, 12rem);
+            font-weight: 700;
+            text-align: center;
+            background: linear-gradient(45deg, #00ff41, #00d4ff, #ff0080);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
+            margin-bottom: 1rem;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .glitch {
+            position: relative;
+            animation: glitch 2s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 90%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+        
+        .terminal-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        
+        .command-line {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .command-line:nth-child(1) { animation-delay: 0.2s; }
+        .command-line:nth-child(2) { animation-delay: 0.4s; }
+        .command-line:nth-child(3) { animation-delay: 0.6s; }
+        .command-line:nth-child(4) { animation-delay: 0.8s; }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .prompt {
+            color: #ff0080;
+            margin-right: 0.5rem;
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: #00ff41;
+            animation: blink 1s infinite;
+            margin-left: 5px;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        .cyber-btn {
+            background: transparent;
+            border: 2px solid #00ff41;
+            color: #00ff41;
+            padding: 1rem 2rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 5px;
+        }
+        
+        .cyber-btn:hover {
+            color: #000;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        .cyber-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, #00ff41, transparent);
+            transition: left 0.5s;
+        }
+        
+        .cyber-btn:hover::before {
+            left: 100%;
+        }
+        
+        .cyber-btn.secondary {
+            border-color: #00d4ff;
+            color: #00d4ff;
+        }
+        
+        .cyber-btn.secondary::before {
+            background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+        }
+        
+        .cyber-btn.secondary:hover {
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
+        }
+        
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ff41, transparent);
+            animation: scan 2s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+        
+        @media (max-width: 768px) {
+            .terminal {
+                transform: perspective(1000px) rotateX(2deg);
+                margin: 1rem;
+            }
+            
+            .terminal-body {
+                padding: 1.5rem;
+            }
+            
+            .terminal-text {
+                font-size: 1rem;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cyber-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <div class="scan-line"></div>
+    
+    <div class="container">
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="terminal-buttons">
+                    <div class="btn btn-close"></div>
+                    <div class="btn btn-minimize"></div>
+                    <div class="btn btn-maximize"></div>
+                </div>
+                <div class="terminal-title">terminal@system:~$</div>
+            </div>
+            
+            <div class="terminal-body">
+                <div class="error-code glitch">404</div>
+                
+                <div class="terminal-text">
+                    <div class="command-line">
+                        <span class="prompt">root@system:~$</span>
+                        <span>locate page.html</span>
+                    </div>
+                    <div class="command-line">
+                        <span style="color: #ff4444;">ERROR:</span> File not found in database
+                    </div>
+                    <div class="command-line">
+                        <span class="prompt">root@system:~$</span>
+                        <span>scan --deep --recursive</span>
+                    </div>
+                    <div class="command-line">
+                        <span style="color: #ffaa00;">WARNING:</span> The page you're looking for has vanished into the digital void
+                        <span class="cursor"></span>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="cyber-btn" onclick="goHome()">
+                        <span>Return Home</span>
+                    </button>
+                    <button class="cyber-btn secondary" onclick="goBack()">
+                        <span>Go Back</span>
+                    </button>
+                    <button class="cyber-btn" onclick="reportIssue()">
+                        <span>Report Issue</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Button functions
+        function goHome() {
+            // Simulate navigation with terminal effect
+            showTerminalMessage('Redirecting to home directory...', () => {
+                window.location.href = '/';
+            });
+        }
+        
+        function goBack() {
+            showTerminalMessage('Executing: history -1', () => {
+                window.history.back();
+            });
+        }
+        
+        function reportIssue() {
+            showTerminalMessage('Opening issue tracker...', () => {
+                // In a real scenario, this would open a contact form or support page
+                alert('Issue reporting system would be integrated here');
+            });
+        }
+        
+        function showTerminalMessage(message, callback) {
+            const terminal = document.querySelector('.terminal-body');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'command-line';
+            messageDiv.innerHTML = `
+                <span class="prompt">system@404:~$</span>
+                <span style="color: #00d4ff;">${message}</span>
+            `;
+            terminal.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                if (callback) callback();
+            }, 1500);
+        }
+        
+        // Add typing effect to cursor
+        function animateCursor() {
+            const cursor = document.querySelector('.cursor');
+            if (cursor) {
+                setInterval(() => {
+                    cursor.style.opacity = cursor.style.opacity === '0' ? '1' : '0';
+                }, 500);
+            }
+        }
+        
+        // Add glitch effect on hover
+        function addGlitchEffect() {
+            const errorCode = document.querySelector('.error-code');
+            errorCode.addEventListener('mouseenter', () => {
+                errorCode.style.animation = 'glitch 0.3s infinite';
+            });
+            errorCode.addEventListener('mouseleave', () => {
+                errorCode.style.animation = 'glitch 2s infinite';
+            });
+        }
+        
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            animateCursor();
+            addGlitchEffect();
+            
+            // Add some random terminal activity
+            setTimeout(() => {
+                showTerminalMessage('System scan complete. No threats detected.');
+            }, 3000);
+        });
+        
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                goBack();
+            } else if (e.key === 'Enter') {
+                goHome();
+            }
+        });
+        
+        // Add mouse trail effect
+        document.addEventListener('mousemove', (e) => {
+            const trail = document.createElement('div');
+            trail.style.position = 'fixed';
+            trail.style.left = e.clientX + 'px';
+            trail.style.top = e.clientY + 'px';
+            trail.style.width = '4px';
+            trail.style.height = '4px';
+            trail.style.background = '#00ff41';
+            trail.style.borderRadius = '50%';
+            trail.style.pointerEvents = 'none';
+            trail.style.zIndex = '1000';
+            trail.style.opacity = '0.7';
+            document.body.appendChild(trail);
+            
+            setTimeout(() => {
+                trail.style.transition = 'all 0.5s ease-out';
+                trail.style.opacity = '0';
+                trail.style.transform = 'scale(0)';
+                setTimeout(() => trail.remove(), 500);
+            }, 50);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'970f699ba74a4e9d',t:'MTc1NTQ5OTE1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
